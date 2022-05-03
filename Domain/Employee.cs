@@ -12,7 +12,6 @@ namespace Domain
         public Account Account { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime VerifiedDate { get; set; }
-        public bool IsSubscribed { get; set; }
         public Company Company { get; set; }
     }
 }

@@ -16,6 +16,7 @@ namespace Domain
         public Status Status { get; set; }
         public Customer Customer { get; set; }
         public Employee Employee { get; set; }
+        public Resource Resource {get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }
