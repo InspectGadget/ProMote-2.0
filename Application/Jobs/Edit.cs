@@ -29,7 +29,11 @@ namespace Application.Jobs
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
                 var job = await _context.Jobs.FindAsync(request.Job.Id);
-                _mapper.Map(request.Job, job);
+                // _mapper.Map(request.Job, job);
+                job.Title = request.Job.Title ?? job.Title;
+                job.StatusId = request.Job.StatusId;
+                var status = await _context.Statuses.FindAsync(request.Job.StatusId);
+                job.Status.Id = request.Job.StatusId;
                 await _context.SaveChangesAsync();
                 return Unit.Value;
             }

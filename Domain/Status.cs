@@ -9,5 +9,6 @@ namespace Domain
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
+        public ICollection<Job> Jobs {get; set;}
     }
 }

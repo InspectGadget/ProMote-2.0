@@ -25,7 +25,13 @@ namespace Application.Jobs
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                _context.Jobs.Add(request.Job);
+                var status = await _context.Statuses.FindAsync(request.Job.StatusId);
+                var newJob = new Job{
+                    Title = request.Job.Title,
+                    StatusId = request.Job.StatusId,
+                    Status = status
+                };
+                _context.Jobs.Add(newJob);
                 await _context.SaveChangesAsync();
                 return Unit.Value;
             }

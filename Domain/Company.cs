@@ -14,5 +14,6 @@ namespace Domain
         public string Address { get; set; }
         public string Phone { get; set; }
         public string Website { get; set; }
+        public ICollection<Employee> Employees {get; set;}
     }
 }

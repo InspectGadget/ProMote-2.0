@@ -10,7 +10,11 @@ namespace Domain
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Password { get; set; }
-        public Customer Customer { get; set; }
         public string Link { get; set; }
+
+        public ICollection<Job> Jobs {get; set;}
+        
+        public Customer Customer { get; set; }
+        public Guid CustomerId { get; set; }
     }
 }
