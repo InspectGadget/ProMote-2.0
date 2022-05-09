@@ -1,7 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Job } from "../models/job";
-import { v4 as uuid } from 'uuid';
 import { Status } from "../models/status";
 import { Category } from "../models/category";
 import { Resource } from "../models/resource";
@@ -22,21 +21,21 @@ export default class JobStore {
     }
 
     get jobsByDate() {
-        return Array.from(this.jobRegistry.values()).sort((a,b) => Date.parse(a.createdAt) - Date.parse(b.createdAt));
+        return Array.from(this.jobRegistry.values()).sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
     }
 
     loadJobs = async () => {
+        this.loadingInitial = true;
         try {
-            const jobs = await agent.Jobs.list();
             const statuses = await agent.Statuses.list();
             this.statuses = statuses;
             const categories = await agent.Categories.list();
             this.categories = categories;
             const resources = await agent.Resources.list();
             this.resources = resources;
+            const jobs = await agent.Jobs.list();
             jobs.forEach(job => {
-                job.createdAt = job.createdAt.split('T')[0];
-                this.jobRegistry.set(job.id, job);
+                this.setJob(job);
             })
             this.setLoadingInitial(false);
         } catch (error) {
@@ -45,36 +44,64 @@ export default class JobStore {
         }
     }
 
+    loadJob = async (id: string) => {
+        let job = this.getJob(id);
+        if (job) {
+            this.selectedJob = job;
+            return job;
+        } else {
+            this.loadingInitial = true;
+            try {
+                job = await agent.Jobs.details(id);
+                this.setJob(job);
+                runInAction(() => {
+                    this.selectedJob = job;
+                })
+                this.setLoadingInitial(false);
+                return job;
+            } catch (error) {
+                console.log(error);
+                this.setLoadingInitial(false);
+            }
+        }
+    }
+
+    loadRelatedObj = async () => {
+        try {
+            const statuses = await agent.Statuses.list();
+            const categories = await agent.Categories.list();
+            const resources = await agent.Resources.list();
+            runInAction(() => {
+                this.statuses = statuses;
+                this.categories = categories;
+                this.resources = resources;
+            })
+            this.setLoadingInitial(false);
+        } catch (error) {
+            console.log(error);
+            this.setLoadingInitial(false);
+        }
+    }
+
+    private setJob = (job: Job) => {
+        job.createdAt = job.createdAt.split('T')[0];
+        this.jobRegistry.set(job.id, job);
+    }
+
+    private getJob = (id: string) => {
+        return this.jobRegistry.get(id);
+    }
+
     setLoadingInitial = (state: boolean) => {
         this.loadingInitial = state;
     }
 
-    selectJob = (id: string) => {
-        this.selectedJob = this.jobRegistry.get(id);
-    }
-
-    cancelSelectedJob = () => {
-        this.selectedJob = undefined;
-    }
-
-    openForm = (id?: string) => {
-        id ? this.selectJob(id) : this.cancelSelectedJob();
-        this.editMode = true;
-    }
-
-    closeForm = () => {
-        this.editMode = false;
-    }
-
     createJob = async (job: Job) => {
         this.loading = true;
-        job.id = uuid();
-        job.customerId = uuid();
-        job.createdAt = "2019-01-06T17:16:40";
         try {
             await agent.Jobs.create(job);
             runInAction(() => {
-                this.jobRegistry.set(job.id,job);
+                this.jobRegistry.set(job.id, job);
                 this.selectedJob = job;
                 this.editMode = false;
                 this.loading = false;
@@ -93,7 +120,7 @@ export default class JobStore {
         try {
             await agent.Jobs.update(job);
             runInAction(() => {
-                this.jobRegistry.set(job.id,job);
+                this.jobRegistry.set(job.id, job);
                 this.selectedJob = job;
                 this.editMode = false;
                 this.loading = false;
@@ -106,16 +133,15 @@ export default class JobStore {
         }
     }
 
-    deleteJob = async (id:string) => {
-        this.loading =true;
-        try{
+    deleteJob = async (id: string) => {
+        this.loading = true;
+        try {
             await agent.Jobs.delete(id);
             runInAction(() => {
                 this.jobRegistry.delete(id);
-                if (this.selectedJob?.id === id) this.cancelSelectedJob();
                 this.loading = false;
             })
-        }catch (error) {
+        } catch (error) {
             console.log(error)
             runInAction(() => {
                 this.loading = false;

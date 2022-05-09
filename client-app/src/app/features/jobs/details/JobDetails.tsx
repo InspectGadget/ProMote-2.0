@@ -1,13 +1,22 @@
+import { observer } from "mobx-react-lite";
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Card, Button, Image, Icon } from "semantic-ui-react";
 import LoadingComponent from "../../../layout/LoadingComponent";
 import { useStore } from "../../../stores/store";
 
-export default function JobDetails() {
+export default observer( function JobDetails() {
 
     const { jobStore } = useStore();
-    const { selectedJob: job, openForm, cancelSelectedJob } = jobStore;
+    const { selectedJob: job, loadJob, loadingInitial } = jobStore;
+    const {id} = useParams<{id: string}>();
 
-    if (!job) return <LoadingComponent />;
+    useEffect(() => {
+        if(id) loadJob(id);
+    }, [id, loadJob]);
+
+    if (loadingInitial || !job) return <LoadingComponent />;
 
     return (
         <Card fluid>
@@ -32,10 +41,10 @@ export default function JobDetails() {
             </Card.Content>
             <Card.Content extra>
                 <Button.Group widths='2'>
-                    <Button onClick={() => openForm(job.id)} basic color='blue' content='Edit' />
-                    <Button onClick={cancelSelectedJob} basic color='grey' content='Cancel' />
+                    <Button as={Link} to={`/manage/${job.id}`} basic color='blue' content='Edit' />
+                    <Button as={Link} to='/jobs' basic color='grey' content='Cancel' />
                 </Button.Group>
             </Card.Content>
         </Card>
     )
-}
+})

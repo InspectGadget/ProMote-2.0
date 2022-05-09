@@ -1,15 +1,20 @@
 import { observer } from "mobx-react-lite";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button, Form, Segment } from "semantic-ui-react";
+import LoadingComponent from "../../../layout/LoadingComponent";
 import { useStore } from "../../../stores/store";
-
+import { v4 as uuid } from 'uuid';
+import { Link } from "react-router-dom";
 export default observer(function JobForm() {
 
+    const navigate = useNavigate();
     const { jobStore } = useStore();
-    const { selectedJob, closeForm, createJob, updateJob,
-        loading, statuses, categories, resources } = jobStore;
+    const { createJob, updateJob,
+        loading, statuses, categories, resources, loadJob, loadRelatedObj, loadingInitial } = jobStore;
+    const { id } = useParams<{ id: string }>();
 
-    const initialState = selectedJob ?? {
+    const [job, setJob] = useState({
         id: '',
         title: '',
         description: '',
@@ -25,12 +30,26 @@ export default observer(function JobForm() {
         resourceId: '',
         createdAt: '',
         image: ''
-    }
-
-    const [job, setJob] = useState(initialState);
+    });
+    loadRelatedObj();
+    useEffect(() => {
+        if(id) {
+            loadJob(id).then(job => setJob(job!));
+        }  
+    }, [id, loadJob])
 
     function handleSubmit() {
-        job.id ? updateJob(job) : createJob(job);
+        if(job.id.length === 0) {
+            let newJob = {
+                ...job,
+                id: uuid(),
+                customerId: uuid(),
+                createdAt: "2019-01-06T17:16:40"
+            };
+            createJob(newJob).then(() => navigate(`/jobs/${newJob.id}`))
+        } else {
+            updateJob(job).then(() => navigate(`/jobs/${job.id}`))
+        }
     }
 
     function handleInputChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -64,6 +83,9 @@ export default observer(function JobForm() {
     const resourceOptions = resources.map(function (row) {
         return { text: row.name, value: row.name }
     })
+
+    if(loadingInitial) return <LoadingComponent content="Loading job..." />
+
     return (
         <Segment clearing>
             <Form onSubmit={handleSubmit}>
@@ -75,7 +97,7 @@ export default observer(function JobForm() {
                 <Form.Dropdown placeholder="Category" value={job.category} options={categoryOptions} name='category' onChange={handleDropdownChange} />
                 <Form.Dropdown placeholder="Select resource" value={job.resource} options={resourceOptions} name='resource' onChange={handleDropdownChange} />
                 <Button loading={loading} floated="right" positive type="submit" content="Submit" />
-                <Button onClick={closeForm} floated="right" type="button" content="Cancel" />
+                <Button as={Link} to='/jobs' floated="right" type="button" content="Cancel" />
             </Form>
         </Segment>
     )
