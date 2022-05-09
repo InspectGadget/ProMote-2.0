@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
@@ -7,13 +9,13 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.Statuses
+namespace Application.Categories
 {
     public class List
     {
-        public class Query : IRequest<Result<List<Status>>> {}
+        public class Query : IRequest<Result<List<Category>>> {}
 
-        public class Handler : IRequestHandler<Query, Result<List<Status>>>
+        public class Handler : IRequestHandler<Query, Result<List<Category>>>
         {
         private readonly DataContext _context;
             public Handler(DataContext context)
@@ -21,9 +23,9 @@ namespace Application.Statuses
             _context = context;
             }
 
-            public async Task<Result<List<Status>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<Category>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return Result<List<Status>>.Success(await _context.Statuses.ToListAsync());
+                return Result<List<Category>>.Success(await _context.Categories.ToListAsync());
             }
         }
     }

@@ -7,13 +7,13 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.Statuses
+namespace Application.Resources
 {
     public class List
     {
-        public class Query : IRequest<Result<List<Status>>> {}
+        public class Query : IRequest<Result<List<Resource>>> {}
 
-        public class Handler : IRequestHandler<Query, Result<List<Status>>>
+        public class Handler : IRequestHandler<Query, Result<List<Resource>>>
         {
         private readonly DataContext _context;
             public Handler(DataContext context)
@@ -21,9 +21,9 @@ namespace Application.Statuses
             _context = context;
             }
 
-            public async Task<Result<List<Status>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<Resource>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return Result<List<Status>>.Success(await _context.Statuses.ToListAsync());
+                return Result<List<Resource>>.Success(await _context.Resources.ToListAsync());
             }
         }
     }

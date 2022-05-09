@@ -1,21 +1,18 @@
-import { Category } from "./category";
-import { Customer } from "./customer";
-import { Employee } from "./employee";
-import { Resource } from "./resource";
-import { Status } from "./status";
 
 export interface Job {
     id: string;
     title: string;
     description: string;
     minExperience: string;
-    salary: number;
-    createdAt: Date;
-    updatedAt: Date;
+    salary: string;
+    createdAt: string;
     status: string;
-    category: Category;
+    statusId:string;
+    category: string;
+    categoryId:string;
     customer: string;
-    employee: string;
+    customerId:string;
     resource: string;
+    resourceId:string;
     image: string;
 }

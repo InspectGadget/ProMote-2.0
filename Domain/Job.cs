@@ -25,7 +25,7 @@ namespace Domain
         public Guid CustomerId { get; set; }
 
         public Employee Employee { get; set; }
-        public Guid EmployeeId { get; set; }
+        public Guid? EmployeeId { get; set; }
 
         public Resource Resource {get; set; }
         public Guid? ResourceId { get; set; }

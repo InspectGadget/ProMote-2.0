@@ -1,4 +1,3 @@
-import { Role } from "./role";
 
 export interface Account {
     id: string;
@@ -7,7 +6,6 @@ export interface Account {
     email: string;
     phone: string;
     password: string;
-    dateOfBirth: Date;
+    dateOfBirth: string;
     image: string;
-    role: Role;
 }
