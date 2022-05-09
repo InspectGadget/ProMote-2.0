@@ -1,58 +1,26 @@
+import { observer } from "mobx-react-lite";
 import React from "react";
 import { Grid } from "semantic-ui-react";
-import { Category } from "../../../models/category";
-import { Job } from "../../../models/job";
-import { Resource } from "../../../models/resource";
-import { Status } from "../../../models/status";
+import { useStore } from "../../../stores/store";
 import JobDetails from "../details/JobDetails";
 import JobForm from "../form/JobForm";
 import JobList from "./JobList";
 
-interface Props {
-    jobs: Job[];
-    statuses: Status[];
-    categories: Category[];
-    resources: Resource[];
-    selectedJob: Job | undefined;
-    editMode: boolean;
-    selectJob:(id:string) => void;
-    cancelSelectJob: () => void;
-    openForm: (id: string) => void;
-    closeForm: () => void;
-    createOrEdit: (job: Job)=> void;
-    deleteJob: (id: string) => void;
-    submitting: boolean;
-}
+export default observer(function JobDashboard() {
 
-export default function JobDashboard({ jobs, selectedJob,selectJob, cancelSelectJob, editMode, 
-    openForm, closeForm, statuses, categories, resources, createOrEdit, deleteJob, submitting }: Props) {
+    const { jobStore } = useStore();
+    const { selectedJob, editMode } = jobStore
+
     return (
         <Grid>
             <Grid.Column width='10'>
-                <JobList jobs={jobs} 
-                    selectJob= {selectJob} 
-                    deleteJob={deleteJob}
-                    submitting={submitting}
-                />
+                <JobList />
             </Grid.Column>
             <Grid.Column width='6'>
-                { selectedJob && !editMode &&
-                <JobDetails 
-                job={selectedJob} 
-                cancelSelectJob={cancelSelectJob}
-                openForm={openForm}
-                />}
+                {selectedJob && !editMode && <JobDetails />}
                 {editMode &&
-                <JobForm 
-                closeForm={closeForm}
-                job={selectedJob}
-                statuses={statuses}
-                categories={categories}
-                resources={resources}
-                createOrEdit={createOrEdit}
-                submitting={submitting}
-                />}
+                    <JobForm />}
             </Grid.Column>
         </Grid>
     )
-}
+})

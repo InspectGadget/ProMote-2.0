@@ -1,18 +1,16 @@
+import { observer } from "mobx-react-lite";
 import React, { SyntheticEvent, useState } from "react";
 import { Button, Item, Label, Segment } from "semantic-ui-react";
-import { Job } from "../../../models/job";
+import { useStore } from "../../../stores/store";
 
-interface Props {
-    jobs: Job[];
-    selectJob:(id:string) => void;
-    deleteJob: (id:string) => void;
-    submitting: boolean;
-}
+export default observer(function JobList() {
 
-export default function JobList({ jobs, selectJob, deleteJob, submitting }: Props) {
+    const { jobStore } = useStore();
+    const { deleteJob, jobsByDate, loading } = jobStore;
+
     const [target, setTarget] = useState('');
 
-    function handleJobDelete(e: SyntheticEvent<HTMLButtonElement>, id: string){
+    function handleJobDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
         setTarget(e.currentTarget.name);
         deleteJob(id);
     }
@@ -20,7 +18,7 @@ export default function JobList({ jobs, selectJob, deleteJob, submitting }: Prop
     return (
         <Segment>
             <Item.Group>
-                {jobs.map(job=>(
+                {jobsByDate.map(job => (
                     <Item key={job.id}>
                         <Item.Content>
                             <Item.Header as='a'>{job.title}</Item.Header>
@@ -30,15 +28,14 @@ export default function JobList({ jobs, selectJob, deleteJob, submitting }: Prop
                                 <div>Experience: {job.minExperience}</div>
                             </Item.Description>
                             <Item.Extra>
-                                <Button onClick={() => selectJob(job.id)} floated="right" content="View" color="blue" />
-                                <Button 
-                                name={job.id}
-                                loading={submitting && target === job.id} 
-                                onClick={(e) => handleJobDelete(e, job.id)} 
-                                floated="right" 
-                                content="Delete" 
-                                color="red" />
-
+                                <Button onClick={() => jobStore.selectJob(job.id)} floated="right" content="View" color="blue" />
+                                <Button
+                                    name={job.id}
+                                    loading={loading && target === job.id}
+                                    onClick={(e) => handleJobDelete(e, job.id)}
+                                    floated="right"
+                                    content="Delete"
+                                    color="red" />
                                 <Label basic content={job.category} />
                             </Item.Extra>
                         </Item.Content>
@@ -47,4 +44,4 @@ export default function JobList({ jobs, selectJob, deleteJob, submitting }: Prop
             </Item.Group>
         </Segment>
     )
-}
+})

@@ -1,14 +1,14 @@
-import React from "react";
 import { Card, Button, Image, Icon } from "semantic-ui-react";
-import { Job } from "../../../models/job";
+import LoadingComponent from "../../../layout/LoadingComponent";
+import { useStore } from "../../../stores/store";
 
-interface Props {
-    job: Job
-    cancelSelectJob: () => void;
-    openForm: (id:string) => void;
-}
+export default function JobDetails() {
 
-export default function JobDetails({job, cancelSelectJob, openForm}: Props) {
+    const { jobStore } = useStore();
+    const { selectedJob: job, openForm, cancelSelectedJob } = jobStore;
+
+    if (!job) return <LoadingComponent />;
+
     return (
         <Card fluid>
             <Card.Content>
@@ -33,7 +33,7 @@ export default function JobDetails({job, cancelSelectJob, openForm}: Props) {
             <Card.Content extra>
                 <Button.Group widths='2'>
                     <Button onClick={() => openForm(job.id)} basic color='blue' content='Edit' />
-                    <Button onClick={cancelSelectJob} basic color='grey' content='Cancel' />
+                    <Button onClick={cancelSelectedJob} basic color='grey' content='Cancel' />
                 </Button.Group>
             </Card.Content>
         </Card>
