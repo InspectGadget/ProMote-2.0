@@ -5,6 +5,7 @@ import LoadingComponent from "../../../layout/LoadingComponent";
 import { useStore } from "../../../stores/store";
 import JobDetails from "../details/JobDetails";
 import JobForm from "../form/JobForm";
+import JobFilters from "./JobFilters";
 import JobList from "./JobList";
 
 export default observer(function JobDashboard() {
@@ -24,7 +25,7 @@ export default observer(function JobDashboard() {
                 <JobList />
             </Grid.Column>
             <Grid.Column width='6'>
-                <h2>Job filters</h2>
+                <JobFilters />
             </Grid.Column>
         </Grid>
     )

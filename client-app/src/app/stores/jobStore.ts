@@ -24,6 +24,7 @@ export default class JobStore {
         return Array.from(this.jobRegistry.values()).sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
     }
 
+
     loadJobs = async () => {
         this.loadingInitial = true;
         try {
