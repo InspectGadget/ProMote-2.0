@@ -3,7 +3,7 @@ import { Container } from 'semantic-ui-react';
 import NavBar from './NavBar';
 import JobDashboard from '../features/jobs/dashboard/JobDashboard';
 import { observer } from 'mobx-react-lite';
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import HomePage from '../features/home/HomePage';
 import JobForm from '../features/jobs/form/JobForm';
 import JobDetails from '../features/jobs/details/JobDetails';
