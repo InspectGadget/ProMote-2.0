@@ -1,8 +1,11 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { toast } from "react-toastify";
 import { Category } from "../models/category";
 import { Job } from "../models/job";
 import { Resource } from "../models/resource";
 import { Status } from "../models/status";
+import { User, UserFormValues } from "../models/user";
+import { store } from "../stores/store";
 
 const sleep = (delay:number) => {
     return new Promise((resolve) => {
@@ -12,14 +15,44 @@ const sleep = (delay:number) => {
 
 axios.defaults.baseURL = 'http://localhost:5000/api'
 
-axios.interceptors.response.use(async response => {
-    try {
-        await sleep(200);
-        return response;
-    } catch (error) {
-        console.log(error);
-        return await Promise.reject(error);
+axios.interceptors.request.use(config => {
+    const token = store.commonStore.token;
+    if (config.headers === undefined) {
+        config.headers = {};
     }
+    if(token) config.headers.Authorization = `Bearer ${token}`
+    return config;
+})
+
+axios.interceptors.response.use(async response => {
+    await sleep(200);
+    return response;
+}, (error: AxiosError) => {
+    const {data, status} = error.response!;
+    switch(status){
+        case 400:
+            if(data.errors){
+                const modalStateErrors = [];
+                for(const key in data.errors){
+                    if(data.errors[key]){
+                        modalStateErrors.push(data.errors[key])
+                    }
+                }
+                throw modalStateErrors.flat();
+            }
+            break;
+        case 401:
+            toast.error('unauthorised');
+            break;
+        case 404:
+            toast.error('not found');
+            break;
+        case 500:
+            toast.error('server error');
+            break;
+
+    }
+    return Promise.reject(error);
 })
 
 const responsBody = <T> (response : AxiosResponse<T>) => response.data;
@@ -51,11 +84,18 @@ const Resources = {
     list: () => requests.get<Resource[]>('/resources')
 }
 
+const Account = {
+    current: () => requests.get<User>('/account'),
+    login: (user: UserFormValues) => requests.post<User>('/account/login', user),
+    register: (user: UserFormValues) => requests.post<User>('/account/register', user)
+}
+
 const agent = {
     Jobs,
     Statuses,
     Categories,
-    Resources
+    Resources,
+    Account
 }
 
 export default agent;

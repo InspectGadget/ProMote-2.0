@@ -1,13 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Jobs;
-using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [AllowAnonymous]
     public class JobsController : BaseApiController
     {
         [HttpGet]

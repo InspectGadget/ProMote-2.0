@@ -15,7 +15,7 @@ export default observer(function JobDashboard() {
         if (jobRegistry.size <= 1) loadJobs();
     }, [jobRegistry.size, loadJobs])
 
-    if (jobStore.loadingInitial) return <LoadingComponent content='Loading app' />
+    if (jobStore.loadingInitial) return <LoadingComponent content='Loading jobs' />
 
     return (
         <Grid>
