@@ -22,7 +22,7 @@ export default observer(function NavBar() {
                     ProMote
                 </Menu.Item>
                 <Menu.Item as={NavLink} to='/jobs' name="Jobs"></Menu.Item>
-                <Menu.Item name="Analysis"></Menu.Item>
+                <Menu.Item as={NavLink} to='/analysis' name="Analysis"></Menu.Item>
                 <Menu.Item>
                     <Button as={NavLink} to='/createJob' positive content='Create Job' />
                 </Menu.Item>
@@ -30,7 +30,7 @@ export default observer(function NavBar() {
                     <Image src={user?.image || '/assets/user.png'} avatar spaced='right' />
                     <Dropdown pointing='top left' text={user?.displayName}>
                         <Dropdown.Menu>
-                            <Dropdown.Item as={Link} to={`profile/${user?.username}`} text='My profile' icon='user' />
+                            <Dropdown.Item as={Link} to={`profiles/${user?.username}`} text='My profile' icon='user' />
                             <Dropdown.Item onClick={funcLogOut} text='Logout' icon='power' />
                         </Dropdown.Menu>
                     </Dropdown>

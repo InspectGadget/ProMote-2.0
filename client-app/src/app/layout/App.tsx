@@ -12,6 +12,8 @@ import { useStore } from '../stores/store';
 import LoadingComponent from './LoadingComponent';
 import ModalContainer from '../common/modals/ModalContainer';
 import { ToastContainer } from 'react-toastify';
+import ProfilePage from '../features/profiles/ProfilePage';
+import Analysis from '../features/Analysis/Analysis';
 
 function App() {
 
@@ -43,6 +45,8 @@ function App() {
               <Route path='jobs/:id' element={<JobDetails />} />
               <Route key={location.key} path='createJob' element={<JobForm />} />
               <Route path='manage/:id' element={<JobForm />} />
+              <Route path='analysis' element={<Analysis />} />
+              <Route path='profiles/:username' element={<ProfilePage />} />
               <Route path='login' element={<LoginForm />} />
             </Routes>
           </Container>

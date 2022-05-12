@@ -120,7 +120,7 @@ export default observer(function JobForm() {
                         <Button 
                             disabled={isSubmitting || !dirty || !isValid}
                             loading={loading} floated="right" positive type="submit" content="Submit" />
-                        <Button as={Link} to='/jobs' floated="right" type="button" content="Cancel" />
+                        <Button onClick={() => navigate(-1)} floated="right" type="button" content="Cancel" />
                     </Form>
                 )}
             </Formik>
