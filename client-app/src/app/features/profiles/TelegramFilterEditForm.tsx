@@ -24,6 +24,8 @@ export default function TelegramFilterEditForm() {
         >
             {({ handleSubmit }) => (
                 <Form className="ui form" onSubmit={handleSubmit}>
+                    <Header as='h4' content='Enter connected number'  textAlign='left' />
+                    <MyTextInput placeholder="Phone number" name='phone' />
                     <Header as='h4' content='Chose category'  textAlign='left' />
                     <MySelectInput placeholder="Category" name='category' options={categoryOptions}/>
                     <Header as='h4' content='Set minimal salary'  textAlign='left' />

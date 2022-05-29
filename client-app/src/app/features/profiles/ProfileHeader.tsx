@@ -6,9 +6,9 @@ export default function ProfileHeader() {
         <Segment>
             <Item.Group>
                 <Item>
-                    <Item.Image avatar size="small" src={'/assets/userImages/bob.jpg'} />
+                    <Item.Image avatar size="small" src={'/assets/userImages/andrii.jpg'} />
                     <Item.Content verticalAlign="middle">
-                        <Header as='h1' content='Bob' />
+                        <Header as='h1' content='Andrii' />
                     </Item.Content>
                 </Item>
             </Item.Group>

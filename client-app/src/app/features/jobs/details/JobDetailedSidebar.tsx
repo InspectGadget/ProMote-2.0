@@ -26,23 +26,23 @@ export default observer(function JobDetailedSidebar() {
                         >
                             Employed
                         </Label>
-                        <Image size='tiny' src={'/assets/userImages/bob.jpg'} />
+                        <Image size='tiny' src={'/assets/userImages/jane.jpg'} />
                         <Item.Content verticalAlign="middle">
                             <Item.Header as='h3'>
-                                <Link to={`#`}>Bob</Link>
+                                <Link to={`#`}>Jane</Link>
                             </Item.Header>
                         </Item.Content>
                     </Item>
                     <Item style={{position:'relative'}}>
-                        <Image size='tiny' src={'/assets/userImages/bob.jpg'} />
+                        <Image size='tiny' src={'/assets/userImages/james.jpg'} />
                         <Item.Content verticalAlign="middle">
                             <Item.Header as='h3'>
-                                <Link to={`#`}>Tom</Link>
+                                <Link to={`#`}>James</Link>
                             </Item.Header>
                         </Item.Content>
                     </Item>
                     <Item style={{position:'relative'}}>
-                        <Image size='tiny' src={'/assets/userImages/bob.jpg'} />
+                        <Image size='tiny' src={'/assets/userImages/harry.jpg'} />
                         <Item.Content verticalAlign="middle">
                             <Item.Header as='h3'>
                                 <Link to={`#`}>Harry</Link>

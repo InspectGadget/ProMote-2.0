@@ -13,7 +13,7 @@ import LoadingComponent from './LoadingComponent';
 import ModalContainer from '../common/modals/ModalContainer';
 import { ToastContainer } from 'react-toastify';
 import ProfilePage from '../features/profiles/ProfilePage';
-import Analysis from '../features/Analysis/Analysis';
+import Analysis from '../features/analysis/Analysis';
 
 function App() {
 

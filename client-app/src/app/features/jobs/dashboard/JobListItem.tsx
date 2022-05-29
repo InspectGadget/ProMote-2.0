@@ -14,7 +14,7 @@ export default function JobListItem({ job }: Props) {
             <Segment>
                 <Item.Group>
                     <Item>
-                        <Item.Image size="tiny" circular src='/assets/userImages/bob.jpg' />
+                        <Item.Image size="tiny" circular src={`/assets/userImages/${job.image}.jpg`} />
                         <Item.Content>
                             <Item.Header as={Link} to={`/jobs/${job.id}`}>{job.title}</Item.Header>
                             <Item.Description><Label basic content={job.category} /></Item.Description>
